@@ -55,6 +55,16 @@ public class GuestController {
         return "redirect:/";
     }
 
+    @GetMapping("/img/{img}")
+    @ResponseBody
+    public byte[] getImagens(@PathVariable("img") String img) throws IOException {
+        File caminho = new File("./src/main/resources/static/img/" + img);
+        if (img != null || img.trim().length() > 0) {
+            return Files.readAllBytes(caminho.toPath());
+        }
+        return null;
+    }
+
     // Obtiene la imagen según el nombre de archivo proporcionado
     /*@GetMapping(value = "/imagem/{imagem}")
     @ResponseBody

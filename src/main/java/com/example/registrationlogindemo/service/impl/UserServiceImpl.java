@@ -6,6 +6,7 @@ import com.example.registrationlogindemo.entity.User;
 import com.example.registrationlogindemo.repository.RoleRepository;
 import com.example.registrationlogindemo.repository.UserRepository;
 import com.example.registrationlogindemo.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,17 @@ public class UserServiceImpl implements UserService {
             if (role == null) {
                 role = checkRoleExist("ROLE_ADMIN");
             }
+        } else if (userCount == 2) {
+            role = roleRepository.findByName("ROLE_ASOCIACION");
+            if (role == null) {
+                role = checkRoleExist("ROLE_ASOCIACION");
+            }
+        } else if (userCount == 3) {
+            role = roleRepository.findByName("ROLE_COOPERATIVA");
+            if (role == null) {
+                role = checkRoleExist("ROLE_COOPERATIVA");
+            }
+
         } else {
             role = roleRepository.findByName("ROLE_USER");
             if (role == null) {
@@ -128,5 +140,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
-
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+    @Override
+    @Transactional
+    public void eliminarEntidad(Long id) {
+        userRepository.deleteById(id);
+    }
 }

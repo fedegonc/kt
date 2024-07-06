@@ -1,4 +1,4 @@
-package com.example.registrationlogindemo.security;
+package com.example.registrationlogindemo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,26 +40,27 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
 
                         authorize.requestMatchers("/", "/register/**", "/register/save", "/index",
-                                        "/favicon.ico", "/img/**","/login/**","/init","/imagem",
+                                        "/favicon.ico","/login/**","/init/**",
                                         "/imagem/**", "/static/css/**", "/css/styles.css","/favicon.*",
-                                        "/error","/gracias","/img"
+                                        "/error","/gracias","/article/**","/img/**"
                                 ).permitAll()
+                                .requestMatchers("/report/**","/img/**").hasAnyRole("USER", "COOPERATIVA", "ASOCIACION", "ADMIN", "ROOT")
 
-                                .requestMatchers("/user/newsolicitude/**", "/user/modifysolicitude/**",
-                                        "/user/deletesolicitude/**","/user/profile/**", "/user/welcome",
-                                        "/solicitude/newsolicitude/**", "/solicitude/editsolicitude/**",
-                                        "/solicitude/modifysolicitude/**","/user/imagem/**","/imagem/**",
-                                        "/logout"
+
+                                .requestMatchers("/user/**","/index/**","/init/**","/report/**"
                                 ).hasRole("USER")
 
+                                .requestMatchers("/cooperativa/**","/report/**"
+                                ).hasRole("COOPERATIVA")
 
-                                .requestMatchers("/user/**","/admin/**","/admin/dashboard/**",
-                                        "/modifysolicitude/**","/dashboard/**", "/users/**",
-                                        "/newsolicitude/**","/solicitude/**","/editsolicitude/**",
-                                        "/deletsolicitude/**","/logout"
+                                .requestMatchers("/asociacion/**","/report/**"
+                                ).hasRole("ASOCIACION")
+
+                                .requestMatchers("/admin/**","/report/**"
                                 ).hasRole("ADMIN")
 
-                                .requestMatchers("/root/**").hasRole("ROOT")
+                                .requestMatchers("/root/**","/report/**")
+                                .hasRole("ROOT")
 
                 )
                 // Configuración de inicio de sesión
@@ -94,6 +95,6 @@ public class SpringSecurity {
 }
 
 //codigo recidual
-                                /* .requestMatchers("/buscarPorNombre").permitAll()
-                                .requestMatchers("/buscarPorCategoria").permitAll()
-                                */
+/* .requestMatchers("/buscarPorNombre").permitAll()
+ .requestMatchers("/buscarPorCategoria").permitAll()
+ */

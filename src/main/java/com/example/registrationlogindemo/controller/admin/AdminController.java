@@ -41,59 +41,9 @@ public class AdminController {
         this.userService = userService;
     }
 
-    // Método para mostrar el dashboard
 
 
-    // Método para editar un usuario
-    @GetMapping("/edit/{id}")
-    public ModelAndView editUser(@PathVariable("id") long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        ModelAndView mv = new ModelAndView("user_form");
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            // Obtener la lista de roles
-            List<Role> listRoles = userService.listRoles();
-            // Agregar el usuario y la lista de roles al modelo
-            mv.addObject("user", user);
-            mv.addObject("listRoles", listRoles);
-        }
-        return mv;
-    }
-
-    // Método para procesar la edición de un usuario
-    @PostMapping("/edit/{id}")
-    public String editUserBanco(@ModelAttribute("user_form") @Valid User user,
-                                BindingResult result, RedirectAttributes msg) {
-        // Verificar errores de validación
-        if (result.hasErrors()) {
-            msg.addFlashAttribute("erro", "Error al editar. Por favor, complete todos los campos correctamente.");
-            return "redirect:/editar/" + user.getId();
-        }
-
-        User userEdit = userRepository.findById(user.getId()).orElse(null);
-
-        if (userEdit != null) {
-            // Actualizar los datos del usuario con los nuevos valores
-            userEdit.setName(user.getName());
-            userEdit.setEmail(user.getEmail());
-            userEdit.setRoles(user.getRoles());
-            // Guardar los cambios en la base de datos
-            userRepository.save(userEdit);
-            msg.addFlashAttribute("success", "Usuario editado exitosamente.");
-        } else {
-            msg.addFlashAttribute("error", "No se encontró el usuario a editar.");
-        }
-
-        return "redirect:/dashboard";
-    }
-
-    // Método para guardar un usuario
-    @PostMapping("/users/save")
-    public String saveUser(User user) {
-        userService.save(user);
-        return "redirect:/users";
-    }
 
     // Método para obtener imágenes
     @RequestMapping(value = "/img/{imagem}", method = RequestMethod.GET)
@@ -213,17 +163,7 @@ public class AdminController {
         return "redirect:/dashboard";
     }
 
-    // Método para obtener imágenes de solicitudes
-    @RequestMapping(value = "/imagemalimento/{imagem}", method = RequestMethod.GET)
-    @ResponseBody
-    public byte[] getImagensSolicitude(@PathVariable("imagem") String imagem) throws IOException {
-        // Obtener la imagen de la ubicación especificada
-        Path caminho = Paths.get("./src/main/resources/static/img/" + imagem);
-        if (imagem != null || imagem.trim().length() > 0) {
-            return Files.readAllBytes(caminho);
-        }
-        return null;
-    }
+
 
 
 }

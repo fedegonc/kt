@@ -42,21 +42,7 @@ public class AdminController {
     }
 
     // Método para mostrar el dashboard
-    @GetMapping("/dashboard")
-    public ModelAndView getDashboard() {
-        ModelAndView mv = new ModelAndView("admin/dashboard");
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        principal.toString();
-        // Obtener todas las solicitudes
-        mv.addObject("principal", principal);
-        List<Solicitude> solicitude = solicitudeRepository.findAll();
-        mv.addObject("solicitude", solicitude);
-        // Obtener todos los usuarios
-        List<User> users = userRepository.findAll();
-        mv.addObject("users", users);
-        return mv;
-    }
 
     // Método para editar un usuario
     @GetMapping("/edit/{id}")
